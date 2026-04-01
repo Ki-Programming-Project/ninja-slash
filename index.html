@@ -3,10 +3,17 @@
 <head>
 <!--
   NINJA SLASH - 忍斬
-  v1.1.0
+  v1.1.1
   Genre: Roguelike Action
   Author: Claude (Anthropic)
   Architecture: State Machine + Object Pool + Web Audio API
+
+  v1.1.1 Changes:
+  - [FIX] bgCache TDZ ReferenceError: moved let declaration before resizeCanvas() call
+  - [FIX] OnlineRanking stub firing fetch() on placeholder URL (ERR_NAME_NOT_RESOLVED)
+        → added isStub() guard; fetch skipped until real API_BASE is configured
+  - [IMPROVE] PC browser cursor: crosshair on game canvas via
+        @media (hover: hover) and (pointer: fine)
 
   v1.1.0 Changes:
   - [NEW] Weapon system: Sword / Shuriken / Scythe with unique playfeel
@@ -90,6 +97,11 @@ body {
   width: 100%;
   height: 100%;
   cursor: none;
+}
+
+/* PC / mouse environment: show crosshair for targeting */
+@media (hover: hover) and (pointer: fine) {
+  #game-canvas { cursor: crosshair; }
 }
 
 /* ============================================================
@@ -928,7 +940,7 @@ body {
 
 <script>
 /* ================================================================
-   NINJA SLASH v1.1.0
+   NINJA SLASH v1.1.1
    Main game script
 ================================================================ */
 'use strict';
@@ -1188,7 +1200,11 @@ const OnlineRanking = (() => {
   // API endpoint (replace with your Supabase / Workers URL)
   const API_BASE = 'https://YOUR_API_ENDPOINT'; // stub
 
+  // Returns true when API_BASE is still the placeholder value
+  const isStub = () => API_BASE.includes('YOUR_API_ENDPOINT');
+
   async function submitScore(name, score, diff) {
+    if (isStub()) return null; // skip fetch until real endpoint is configured
     try {
       const res = await fetch(`${API_BASE}/scores`, {
         method: 'POST',
@@ -1203,6 +1219,7 @@ const OnlineRanking = (() => {
   }
 
   async function fetchLeaderboard(diff = 'normal', limit = 10) {
+    if (isStub()) return null; // skip fetch until real endpoint is configured
     try {
       const res = await fetch(`${API_BASE}/scores?diff=${diff}&limit=${limit}`, {
         signal: AbortSignal.timeout(3000),
