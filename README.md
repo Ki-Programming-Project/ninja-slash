@@ -4,7 +4,7 @@ A stylish, minimalist Roguelike action game built with pure vanilla JavaScript a
 
 ## 🔗 Live Demo
 Play the game directly in your browser:  
-[https://ki-programming-project.github.io/ninja-slash/](https://ki-programming-project.github.io/ninja-slash/)
+[https://men0tai0ko.github.io/ninja-slash/]
 
 ## ⚡ Features
 - **Roguelike Mechanics**: Face randomized challenges and test your skills.
@@ -21,8 +21,3 @@ Play the game directly in your browser:
 
 ## 🚀 Quick Start
 No build process is required. Simply clone the repository and open `index.html` in any modern web browser.
-
-```bash
-git clone [https://github.com/ki-programming-project/ninja-slash.git](https://github.com/ki-programming-project/ninja-slash.git)
-cd ninja-slash
-# Open index.html in your browser
